@@ -1,28 +1,18 @@
 import pcapy
 from scapy.all import *
 
-# configure PCAP
-dev = "wlp3s0"
-max_bytes = 1024
-promiscuous = False
-read_timeout = 100 # in milliseconds
+# Define the network interface to capture on
+interface = 'wlp3s0'
 
-# open PCAP interface
-pcap = pcapy.open_live(dev, max_bytes, promiscuous, read_timeout)
+# Open the network interface in promiscuous mode
+pcap = pcapy.open_live(interface, 65536, 1, 0)
 
-# process packets
-while True:
-    try:
-        # read packet
-        _, packet_data = pcap.next()
+# Define a callback function to process packets
+def handle_packet(pkt):
+    pkt = Ether(pkt)
+    if IP in pkt:
+        print(pkt[IP].src)
 
-        # parse packet using Scapy
-        packet = Ether(packet_data)
-
-        # print source and destination IPv4 addresses
-        if IP in packet:
-            ip_layer = packet[IP]
-            print(f"Source IP: {ip_layer.src}, Destination IP: {ip_layer.dst}")
-    except pcapy.PcapError:
-        continue
+# Start capturing packets
+pcap.loop(-1, handle_packet)
 

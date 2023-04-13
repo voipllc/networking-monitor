@@ -2,7 +2,7 @@ import pcapy
 from scapy.all import *
 
 # configure PCAP
-dev = "wlp3s0"
+dev = "eth0"
 max_bytes = 1024
 promiscuous = False
 read_timeout = 100 # in milliseconds

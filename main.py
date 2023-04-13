@@ -1,8 +1,11 @@
 import pcapy
 from scapy.all import *
 
-# Define the network interface to capture on
-interface = 'wlp3s0'
+# configure PCAP
+dev = "wlp3s0"
+max_bytes = 1024
+promiscuous = False
+read_timeout = 100 # in milliseconds
 
 # Open the network interface in promiscuous mode
 pcap = pcapy.open_live(interface, 65536, 1, 0)
